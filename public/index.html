@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SecureChat - Login/Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="top-bar">
+    <span class="header-title">SecureChat</span>
+    <button class="header-secure">End-to-end encrypted</button>
+  </div>
+  <div class="login-centerbox">
+    <div class="login-card">
+      <div class="login-card-title">Welcome</div>
+      <div class="login-tabs">
+        <button class="login-tab-btn active" id="login-tab-btn">Login</button>
+        <button class="login-tab-btn" id="register-tab-btn">Register</button>
+      </div>
+
+      <form id="login-form">
+        <input type="text" id="login-username" placeholder="Username" maxlength="32" autocomplete="username" required>
+        <input type="password" id="login-password" placeholder="Password" maxlength="32" autocomplete="current-password" required>
+        <button type="button" id="login-btn" class="flat-wide">Login</button>
+        <div class="login-switch-info">
+          Don’t have an account?
+          <span class="login-link" id="show-register">Register</span>
+        </div>
+        <div id="login-error" class="error-msg"></div>
+      </form>
+
+      <form id="register-form" style="display:none">
+        <input type="text" id="register-username" placeholder="Username" maxlength="32" autocomplete="username" required>
+        <input type="password" id="register-password" placeholder="Password" maxlength="32" autocomplete="new-password" required>
+        <button type="button" id="register-btn" class="flat-wide">Register</button>
+        <div class="login-switch-info">
+          Already have an account?
+          <span class="login-link" id="show-login">Login</span>
+        </div>
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Toggle tabs/links
+    const loginTab = document.getElementById('login-tab-btn');
+    const registerTab = document.getElementById('register-tab-btn');
+    const showRegister = document.getElementById('show-register');
+    const showLogin = document.getElementById('show-login');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+
+    loginTab.onclick = () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginForm.style.display = '';
+      registerForm.style.display = 'none';
+    };
+    registerTab.onclick = () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      loginForm.style.display = 'none';
+      registerForm.style.display = '';
+    };
+    showRegister.onclick = () => registerTab.click();
+    showLogin.onclick = () => loginTab.click();
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
