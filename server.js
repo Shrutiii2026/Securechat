@@ -12,9 +12,16 @@ const io = new Server(server);
 
 app.use(cors());
 app.use(express.json());
+
+// Serve splash.html at root URL before static files
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'splash.html'));
+});
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// SQLite
+// SQLite setup
 const db = new sqlite3.Database(path.join(__dirname, 'securechat.db'));
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -23,7 +30,7 @@ db.serialize(() => {
     password TEXT,
     publicKey TEXT
   )`);
-  // IMPORTANT: includes senderPub and receiverPub for per-message derivation
+
   db.run(`CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sender TEXT,
@@ -31,9 +38,12 @@ db.serialize(() => {
     content TEXT,
     senderPub TEXT,
     receiverPub TEXT,
+    read INTEGER DEFAULT 0,
     timestamp INTEGER
   )`);
 });
+
+// API endpoints:
 
 // Register
 app.post('/api/register', (req, res) => {
@@ -62,7 +72,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// Update session public key (chat page load)
+// Update session public key
 app.post('/api/updatePublicKey', (req, res) => {
   const { username, publicKey } = req.body;
   if (!username || !publicKey) return res.status(400).json({ error: 'Missing fields' });
@@ -72,7 +82,7 @@ app.post('/api/updatePublicKey', (req, res) => {
   });
 });
 
-// Users list
+// Get users list
 app.get('/api/users', (req, res) => {
   db.all(`SELECT username, publicKey FROM users`, [], (err, rows) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -80,7 +90,7 @@ app.get('/api/users', (req, res) => {
   });
 });
 
-// Latest public key for a user (for outgoing sends)
+// Get latest public key for a user
 app.get('/api/publicKey/:username', (req, res) => {
   const { username } = req.params;
   db.get(`SELECT publicKey FROM users WHERE username = ?`, [username], (err, row) => {
@@ -90,7 +100,7 @@ app.get('/api/publicKey/:username', (req, res) => {
   });
 });
 
-// Encrypted history (returns saved per-message pubs)
+// Get encrypted chat history
 app.get('/api/messages', (req, res) => {
   const { user1, user2 } = req.query;
   if (!user1 || !user2) return res.status(400).json({ error: 'Missing query params' });
@@ -106,7 +116,7 @@ app.get('/api/messages', (req, res) => {
   );
 });
 
-// Presence + realtime relay
+// Presence and real-time messaging
 const onlineUsers = new Map();
 
 io.on('connection', (socket) => {
@@ -126,7 +136,6 @@ io.on('connection', (socket) => {
     io.emit('user-status', { username, status: 'offline' });
   });
 
-  // Relay with per-message pubs
   socket.on('send-message', (data) => {
     const { sender, receiver, content, senderPub, receiverPub, timestamp } = data;
     const ts = typeof timestamp === 'number' ? timestamp : Date.now();
@@ -136,14 +145,28 @@ io.on('connection', (socket) => {
       [sender, receiver, content, senderPub, receiverPub, ts],
       function (err) {
         if (err) return;
+        const payload = {
+          id: this.lastID, sender, receiver, content, senderPub, receiverPub, timestamp: ts
+        };
         const receiverSocketId = onlineUsers.get(receiver);
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit('receive-message', {
-            id: this.lastID, sender, receiver, content, senderPub, receiverPub, timestamp: ts
-          });
-        }
+        if (receiverSocketId) io.to(receiverSocketId).emit('receive-message', payload);
+
+        const senderSocketId = onlineUsers.get(sender);
+        if (senderSocketId) io.to(senderSocketId).emit('sent-stored', { id: this.lastID, timestamp: ts });
       }
     );
+  });
+
+  socket.on('message-read', ({ messageId, reader }) => {
+    if (!messageId) return;
+    db.run(`UPDATE messages SET read = 1 WHERE id = ?`, [messageId], function (err) {
+      if (err) return;
+      db.get(`SELECT sender FROM messages WHERE id = ?`, [messageId], (e, row) => {
+        if (e || !row) return;
+        const senderSocketId = onlineUsers.get(row.sender);
+        if (senderSocketId) io.to(senderSocketId).emit('read-receipt', { messageId, reader });
+      });
+    });
   });
 
   socket.on('disconnect', () => {

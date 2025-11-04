@@ -7,41 +7,106 @@ body, html {
   color: #22223b;
 }
 
-/* Top bar */
+/* Top bar - for logo and SecureChat text */
 .top-bar {
   width: 100vw;
   background: #d092ee;
-  height: 57px;
+  height: 70px; /* taller to fit large logo */
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 32px;
+  padding-left: 38px;
   position: fixed;
   top: 0; left: 0; z-index: 10;
   box-shadow: 0 2px 6px #e5cdee4a;
 }
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  width: 54px;
+  background: linear-gradient(135deg,#ad55c3,#d092ee);
+  border-radius: 14px;
+  box-shadow: 0 3px 15px #e3bcfb60;
+  overflow: hidden;
+}
+
+.header-logo img {
+  width: 42px;
+  height: 42px;
+  display: block;
+}
+
 .header-title {
-  font-size: 1.37rem;
-  font-weight: bold;
+  font-size: 2.1rem;
+  font-weight: 700;
   color: #fff;
   letter-spacing: 0.4px;
-  margin-right: 18px;
+  margin-left: 18px;
+  margin-right: 26px;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  height: 54px;
 }
+
 .header-secure {
   background: #fff;
   color: #b587c4;
   border: none;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 1.03rem;
-  padding: 5px 22px;
-  margin-right: auto;
-  margin-left: 10px;
-  box-shadow: 0 1px 3px #e5cff953;
+  font-size: 1.06rem;
+  padding: 6px 22px;
+  box-shadow: 0 2px 8px #e3bcfb59;
 }
+
+
+
+/* Menu Button & Dropdown */
+.menu-btn {
+  font-size: 26px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 15px;
+  vertical-align: middle;
+  transition: color 0.14s;
+  padding: 0;
+}
+.menu-btn:hover { color: #f0e8fa; }
+
+.menu-dropdown {
+  background: white;
+  border: 1px solid #d092ee;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(208, 146, 238, 0.25);
+  width: 140px;
+}
+.menu-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.menu-dropdown ul li {
+  padding: 11px 15px;
+  border-bottom: 1px solid #f0e8fa;
+  font-weight: 600;
+  color: #ad55c3;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+.menu-dropdown ul li:last-child { border-bottom: none; }
+.menu-dropdown ul li:hover { background: #f7eafd; }
+.menu-dropdown:not(.hidden) { display: block; }
+.menu-dropdown.hidden { display: none; }
+
 .logout-btn {
   margin-right: 36px;
-  margin-left: auto;
   background: #fff;
   color: #ad55c3;
   border: 2px solid #ad55c3;
@@ -107,6 +172,26 @@ body, html {
   border: 2px solid #e9d8fd; border-radius: 24px; font-size: 1rem; color: #39355b; font-weight: 500;
 }
 ul#user-list { list-style: none; margin: 0; padding: 0; }
+.user-item { position: relative; }
+.unread-badge {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: #d72660;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: none;           /* hidden when 0 */
+  align-items: center;
+  justify-content: center;
+}
+.unread-badge.show { display: inline-flex; }
+
 .user-item {
   display: flex; align-items: center; background: #fff; border-radius: 18px;
   padding: 13px 14px 13px 10px; margin: 0 8px 10px; cursor: pointer; transition: background 0.13s;
@@ -164,3 +249,93 @@ ul#user-list { list-style: none; margin: 0; padding: 0; }
   .chat-main-container { flex-direction: column; }
   .sidebar { width: 100%; padding-top: 12px; }
 }
+.login-tab-btn.active { background: #d092ee; color: #fff; border: 2px solid #d092ee; font-weight: 700;}
+.login-tab-btn {
+  flex: 1; border: 2px solid #ad55c3; border-radius: 8px; background: #fff; color: #ad55c3;
+  padding: 10px 0; margin: 0 3px; font-size: 1.04rem; font-weight: 600; cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+}
+.flat-wide {
+  width: 100%; background: linear-gradient(90deg, #ad55c3 67%, #d092ee 130%);
+  border: none; color: #fff; border-radius: 10px; font-size: 1.13rem; font-weight: 600;
+  padding: 11px 0; margin: 7px 0 11px; cursor: pointer; box-shadow: 0 1px 8px #d092ee34;
+  transition: background 0.14s;
+}
+.flat-wide:hover { background: linear-gradient(90deg, #b587c4 80%, #e3bcfb 120%);}
+.login-link { color: #ad55c3; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 3px;}
+.error-msg { color: #d72660; font-size: 0.98rem; text-align: center;}
+.success-msg { color: #0aa354; font-size: 0.97rem; text-align: center;
+}.hero-right {
+  flex: 1;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 0;
+}
+
+/* First Image → Bigger Zoom-in */
+.hero-img:nth-child(1) {
+  max-width: 720px;
+  animation: fadeUpInBig 4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+.hero-img:nth-child(2) {
+  max-width: 580px;
+  animation: fadeUpInSmall 4.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 1.5s;
+}
+
+
+/* Animations */
+@keyframes fadeUpInBig {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1.06);  /* Slight zoom for big */
+  }
+}
+
+@keyframes fadeUpInSmall {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1.00);
+  }
+}
+
+
+.topbar-spacer { flex: 1 1 auto; }
+.top-bar { display: flex; align-items: center; }
+.logout-btn { display: inline-flex; align-items: center; }
+.menu-btn-right { margin-left: 12px; margin-right: 16px; }
+ 
+
+
+/* Keep right-side buttons inside the bar */
+.top-bar {
+  padding-right: 16px;      /* room at the right edge */
+  box-sizing: border-box;   /* respect padding with width */
+}
+
+/* Ensure the menu icon doesn't stick to the edge */
+.menu-btn {
+  line-height: 1;
+  height: 32px;             /* consistent tap target */
+  width: 32px;              /* square icon area */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right-aligned spacing after Logout */
+.menu-btn-right {
+  margin-left: 12px;
+  margin-right: 4px;        /* small, not zero */
+}
+
+/* Optional: keep Logout from hugging edge */
+.logout-btn {
+  margin-right: 10px;       /* replace larger margins if needed */
+}
+
+.top-bar { padding-right: 16px; box-sizing: border-box; }

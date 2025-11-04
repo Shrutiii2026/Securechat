@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SecureChat Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0; background: #fff;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .splash-logo {
+      margin-top: 8vh;
+      display: flex; align-items: center; gap: 32px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 3.1rem;
+      font-weight: bold;
+      color: #ad55c3;
+    }
+    .splash-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #ad55c3, #d092ee);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.1rem;
+      color: #fff;
+      box-shadow: 0 4px 18px #debef7;
+    }
+    .splash-icon img {
+      width: 65px;
+      height: 65px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="splash-logo">
+    <div class="splash-icon">
+      <img src="lock.png" alt="lock">
+    </div>
+    SecureChat
+  </div>
+  <script>
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 2000);
+  </script>
+</body>
+</html>

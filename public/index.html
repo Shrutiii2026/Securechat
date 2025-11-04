@@ -1,73 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SecureChat - Login/Register</title>
+  <meta charset="UTF-8" />
+  <title>SecureChat - Private. Simple. Modern.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { background: #fff; }
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 38px 16px 38px; background: #fff; border-bottom: 1px solid #e5e5e5;
+    }
+    .navbar-left { display: flex; align-items: center; gap: 12px; }
+    .navbar-logo { width: 46px;height: 46px;background: linear-gradient(135deg, #ad55c3, #d092ee);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.65rem; color: #fff; font-weight: bold;
+    }
+    .navbar-title { font-size: 1.35rem; font-weight: 700; color: #ad55c3;}
+    .navbar-right { display: flex; gap: 12px;}
+    .navbar-btn {padding: 8px 23px; border-radius: 8px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer;}
+    .navbar-btn.login { background: #fff; color: #ad55c3; border: 2px solid #ad55c3;}
+    .navbar-btn.login:hover { background: #faf8fd; }
+    .navbar-btn.register { background: linear-gradient(90deg, #ad55c3, #d092ee); color: #fff; box-shadow: 0 2px 8px #d092ee50;}
+    .navbar-btn.register:hover { background: linear-gradient(90deg, #b587c4, #e3bcfb);}
+    .hero {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 64px 36px 48px 36px; gap: 44px; flex-wrap: wrap;
+    }
+    .hero-left { flex: 1; min-width: 340px; }
+    .hero-title { font-size: 2.8rem; font-weight: 800; color: #ad55c3; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;}
+    .hero-desc { font-size: 1.22rem; color: #65676b; margin-bottom: 21px;}
+    .hero-features { margin-bottom: 32px;}
+    .hero-features li { list-style: none; margin-bottom: 11px; font-size: 1.09rem; color: #542b7c; }
+    .hero-features li:before { content: "✓"; color: #ad55c3; font-weight: bold; margin-right: 9px;}
+    .hero-cta { display: flex; gap: 16px;}
+    .hero-cta button { padding: 11px 31px; border: none; border-radius: 8px; font-size: 1.08rem; font-weight: 700; cursor: pointer;}
+    .btn-primary { background: linear-gradient(90deg, #ad55c3, #d092ee); color: #fff;}
+    .btn-primary:hover { background: linear-gradient(90deg, #b587c4, #e3bcfb);}
+    .btn-secondary { background: #fff; color: #ad55c3; border: 2px solid #ad55c3;}
+    .btn-secondary:hover { background: #faf8fd; }
+    .hero-right { 
+      flex: 1; min-width: 320px; display: flex; flex-direction: column; align-items: center; margin-top: 8px; gap: 24px;
+    }
+    .hero-img {
+      max-width: 360px; width: 90%;
+      border-radius: 23px;
+      border: 4px solid #e3bee8;
+      box-shadow: 0 6px 24px #b992ee33;
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+      animation: fadeUpIn 1.3s cubic-bezier(0.33,1,0.68,1) forwards;
+      margin-bottom: 6px;
+      background: #fff;
+    }
+    .hero-img:nth-child(2) { animation-delay: 0.45s; }
+    @keyframes fadeUpIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .footer { text-align: center; padding: 40px 32px 20px 32px; color: #a095b9; font-size: 1.04rem; border-top: 1px solid #e5e5e5;}
+    @media (max-width: 940px) { .hero { flex-direction: column; gap: 22px; padding: 44px 17px 34px 17px; } .hero-right {margin-top: 20px; } }
+  </style>
 </head>
 <body>
-  <div class="top-bar">
-    <span class="header-title">SecureChat</span>
-    <button class="header-secure">End-to-end encrypted</button>
-  </div>
-  <div class="login-centerbox">
-    <div class="login-card">
-      <div class="login-card-title">Welcome</div>
-      <div class="login-tabs">
-        <button class="login-tab-btn active" id="login-tab-btn">Login</button>
-        <button class="login-tab-btn" id="register-tab-btn">Register</button>
-      </div>
+  <nav class="navbar">
+    <div class="navbar-left">
+     <div class="navbar-logo">
+  <img src="lock.png" alt="SecureChat Logo" style="width:40px; height:40px;">
+</div>
 
-      <form id="login-form">
-        <input type="text" id="login-username" placeholder="Username" maxlength="32" autocomplete="username" required>
-        <input type="password" id="login-password" placeholder="Password" maxlength="32" autocomplete="current-password" required>
-        <button type="button" id="login-btn" class="flat-wide">Login</button>
-        <div class="login-switch-info">
-          Don’t have an account?
-          <span class="login-link" id="show-register">Register</span>
-        </div>
-        <div id="login-error" class="error-msg"></div>
-      </form>
-
-      <form id="register-form" style="display:none">
-        <input type="text" id="register-username" placeholder="Username" maxlength="32" autocomplete="username" required>
-        <input type="password" id="register-password" placeholder="Password" maxlength="32" autocomplete="new-password" required>
-        <button type="button" id="register-btn" class="flat-wide">Register</button>
-        <div class="login-switch-info">
-          Already have an account?
-          <span class="login-link" id="show-login">Login</span>
-        </div>
-        <div id="register-error" class="error-msg"></div>
-        <div id="register-success" class="success-msg"></div>
-      </form>
+      <div class="navbar-title">SecureChat</div>
     </div>
-  </div>
+    <div class="navbar-right">
+      <button class="navbar-btn login" onclick="window.location.href='login.html'">Log In</button>
+      <button class="navbar-btn register" onclick="window.location.href='login.html#register'">Create Account</button>
+    </div>
+  </nav>
 
-  <script>
-    // Toggle tabs/links
-    const loginTab = document.getElementById('login-tab-btn');
-    const registerTab = document.getElementById('register-tab-btn');
-    const showRegister = document.getElementById('show-register');
-    const showLogin = document.getElementById('show-login');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="hero-title">A place for meaningful conversations.</h1>
+      <div class="hero-desc">
+        SecureChat makes your conversations safe, fast, and easy.<br>
+        Connect, share, and experience privacy-first chat – like WhatsApp, but truly secure.
+      </div>
+    <ul class="hero-features">
+  <li>End-to-end encrypted chats</li>
+  <li>Private 1-to-1 secure rooms</li>
+  <li>Chat history stays on your device only</li>
+  <li>Online + Offline messaging supported</li>
+  <li>No Ads. No tracking. No analytics.</li>
+  <li>Search messages instantly</li>
+</ul>
 
-    loginTab.onclick = () => {
-      loginTab.classList.add('active');
-      registerTab.classList.remove('active');
-      loginForm.style.display = '';
-      registerForm.style.display = 'none';
-    };
-    registerTab.onclick = () => {
-      registerTab.classList.add('active');
-      loginTab.classList.remove('active');
-      loginForm.style.display = 'none';
-      registerForm.style.display = '';
-    };
-    showRegister.onclick = () => registerTab.click();
-    showLogin.onclick = () => loginTab.click();
-  </script>
-  <script src="app.js"></script>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="window.location.href='login.html#register'">Get Started</button>
+        <button class="btn-secondary" onclick="window.location.href='login.html'">Sign In</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="chat-app-1.png" alt="Chat Screen 1" class="hero-img" />
+      <img src="chat-app-2.png" alt="Chat Screen 2" class="hero-img" />
+    </div>
+  </section>
+  <footer class="footer">
+    © 2025 SecureChat. All rights reserved.<br>
+    Not affiliated with WhatsApp/Messenger. All trademarks belong to their owners.
+  </footer>
 </body>
 </html>

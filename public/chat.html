@@ -8,10 +8,16 @@
 </head>
 <body>
   <div class="top-bar">
+    <div class="header-logo">
+      <img src="lock.png" alt="SecureChat Logo" />
+    </div>
     <span class="header-title">SecureChat</span>
-    <span class="header-secure">End-to-end encrypted</span>
+    <button class="header-secure">End-to-end encrypted</button>
+    <div class="topbar-spacer"></div>
     <button id="logout-btn" class="logout-btn">Logout</button>
+    <button id="menu-btn" class="menu-btn menu-btn-right" aria-label="Menu">☰</button>
   </div>
+
   <div class="chat-main-container">
     <div class="sidebar">
       <input type="text" id="user-search" placeholder="Search users..." />
