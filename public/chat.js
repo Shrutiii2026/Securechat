@@ -92,18 +92,22 @@ window.addEventListener('scroll', positionMenu);
     }
   });
 
-  document.getElementById('help-item').onclick = () => {
+  document.addEventListener('click', (e) => {
+  if (!menuDropdown) return;
+  const id = e.target && e.target.id;
+  if (id === 'help-item') {
     alert('Help: This is a secure chat app. Contact support for assistance.');
     menuDropdown.classList.add('hidden');
-  };
-  document.getElementById('contact-item').onclick = () => {
+  }
+  if (id === 'contact-item') {
     alert('Contact: support@securechat.com');
     menuDropdown.classList.add('hidden');
-  };
-  document.getElementById('settings-item').onclick = () => {
-    alert('Settings page coming soon.');
+  }
+  if (id === 'settings-item') {
     menuDropdown.classList.add('hidden');
-  };
+    window.location.href = 'settings.html';
+  }
+});
 
   // ------------------------
   // Message encryption, decryption, presence, and UI
@@ -394,7 +398,7 @@ function updateUnreadBadge(username) {
     updateUnreadBadge(m.sender);
   } 
 
-  
+
     if (m.receiver === currentUser && selectedUser === m.sender) {
       pendingReadIds.add(m.id);
       tryMarkRead();
