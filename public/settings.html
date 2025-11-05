@@ -2,124 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SecureChat - Private. Simple. Modern.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecureChat - Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="settings-body">
+  <div class="top-bar">
+    <div class="header-logo"><img src="lock.png" alt="SecureChat Logo" /></div>
+    <span class="header-title">SecureChat</span>
+    <button class="header-secure">End-to-end encrypted</button>
+    <div class="topbar-spacer"></div>
+    <a href="chat.html" class="logout-btn" style="text-decoration:none;display:inline-flex;align-items:center;">Back to Chat</a>
+  </div>
+
+  <div class="settings-container">
+    <aside class="settings-sidebar">
+      <button class="settings-tab-btn active" data-tab="appearance">Appearance</button>
+      <button class="settings-tab-btn" data-tab="account">My Account</button>
+      <button class="settings-tab-btn" data-tab="privacy">Privacy</button>
+    </aside>
+
+    <main class="settings-content">
+      <section class="settings-panel" id="panel-appearance">
+        <h2>Appearance</h2>
+        <label class="toggle-row">
+          <input id="dark-toggle" type="checkbox" />
+          <span>Enable dark theme</span>
+        </label>
+        <p class="hint">Dark theme preference is saved on this device.</p>
+      </section>
+
+      <section class="settings-panel hidden" id="panel-account">
+        <h2>My Account</h2>
+        <div class="kv-row">
+          <span class="kv-key">Username</span>
+          <span class="kv-val" id="acct-username"></span>
+        </div>
+        <button id="logout-here" class="flat-wide" style="max-width:240px">Logout</button>
+      </section>
+
+      <section class="settings-panel hidden" id="panel-privacy">
+        <h2>Privacy</h2>
+        <p>This app uses end-to-end encryption for messages between users and stores only what is needed to operate your account (username and current session public key). Nothing is sold or shared with third parties.</p>
+        <p>Your device holds your private key locally; the server never sees it. For best security, keep your browser and OS updated.</p>
+      </section>
+    </main>
+  </div>
 
   <script>
-  (function(){
-    try {
-      if (localStorage.getItem('securechat_theme') === 'dark') {
+    // Tabs
+    const tabs = document.querySelectorAll('.settings-tab-btn');
+    const panels = {
+      appearance: document.getElementById('panel-appearance'),
+      account: document.getElementById('panel-account'),
+      privacy: document.getElementById('panel-privacy')
+    };
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        Object.values(panels).forEach(p => p.classList.add('hidden'));
+        panels[btn.dataset.tab].classList.remove('hidden');
+      });
+    });
+
+    // Account info
+    const uname = sessionStorage.getItem('username') || '';
+    document.getElementById('acct-username').textContent = uname;
+
+    // Logout here
+    document.getElementById('logout-here').addEventListener('click', () => {
+      try { const s = window.parent?.socket || window.socket; if (s) s.emit && s.emit('logout', uname); } catch {}
+      sessionStorage.clear();
+      location.href = 'index.html';
+    });
+
+    // Dark theme
+    const DARK_KEY = 'securechat_theme';
+    const toggle = document.getElementById('dark-toggle');
+    const saved = localStorage.getItem(DARK_KEY);
+    if (saved === 'dark') document.documentElement.classList.add('theme-dark');
+    toggle.checked = document.documentElement.classList.contains('theme-dark');
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
         document.documentElement.classList.add('theme-dark');
+        localStorage.setItem(DARK_KEY, 'dark');
+      } else {
+        document.documentElement.classList.remove('theme-dark');
+        localStorage.setItem(DARK_KEY, 'light');
       }
-    } catch(e){}
-  })();
-</script>
-
-
-
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body { background: #fff; }
-    .navbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 38px 16px 38px; background: #fff; border-bottom: 1px solid #e5e5e5;
-    }
-    .navbar-left { display: flex; align-items: center; gap: 12px; }
-    .navbar-logo { width: 46px;height: 46px;background: linear-gradient(135deg, #ad55c3, #d092ee);
-      border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.65rem; color: #fff; font-weight: bold;
-    }
-    .navbar-title { font-size: 1.35rem; font-weight: 700; color: #ad55c3;}
-    .navbar-right { display: flex; gap: 12px;}
-    .navbar-btn {padding: 8px 23px; border-radius: 8px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer;}
-    .navbar-btn.login { background: #fff; color: #ad55c3; border: 2px solid #ad55c3;}
-    .navbar-btn.login:hover { background: #faf8fd; }
-    .navbar-btn.register { background: linear-gradient(90deg, #ad55c3, #d092ee); color: #fff; box-shadow: 0 2px 8px #d092ee50;}
-    .navbar-btn.register:hover { background: linear-gradient(90deg, #b587c4, #e3bcfb);}
-    .hero {
-      display: flex; align-items: center; justify-content: space-between;
-      max-width: 1200px; margin: 0 auto; padding: 64px 36px 48px 36px; gap: 44px; flex-wrap: wrap;
-    }
-    .hero-left { flex: 1; min-width: 340px; }
-    .hero-title { font-size: 2.8rem; font-weight: 800; color: #ad55c3; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;}
-    .hero-desc { font-size: 1.22rem; color: #65676b; margin-bottom: 21px;}
-    .hero-features { margin-bottom: 32px;}
-    .hero-features li { list-style: none; margin-bottom: 11px; font-size: 1.09rem; color: #542b7c; }
-    .hero-features li:before { content: "✓"; color: #ad55c3; font-weight: bold; margin-right: 9px;}
-    .hero-cta { display: flex; gap: 16px;}
-    .hero-cta button { padding: 11px 31px; border: none; border-radius: 8px; font-size: 1.08rem; font-weight: 700; cursor: pointer;}
-    .btn-primary { background: linear-gradient(90deg, #ad55c3, #d092ee); color: #fff;}
-    .btn-primary:hover { background: linear-gradient(90deg, #b587c4, #e3bcfb);}
-    .btn-secondary { background: #fff; color: #ad55c3; border: 2px solid #ad55c3;}
-    .btn-secondary:hover { background: #faf8fd; }
-    .hero-right { 
-      flex: 1; min-width: 320px; display: flex; flex-direction: column; align-items: center; margin-top: 8px; gap: 24px;
-    }
-    .hero-img {
-      max-width: 360px; width: 90%;
-      border-radius: 23px;
-      border: 4px solid #e3bee8;
-      box-shadow: 0 6px 24px #b992ee33;
-      opacity: 0;
-      transform: translateY(40px) scale(0.97);
-      animation: fadeUpIn 1.3s cubic-bezier(0.33,1,0.68,1) forwards;
-      margin-bottom: 6px;
-      background: #fff;
-    }
-    .hero-img:nth-child(2) { animation-delay: 0.45s; }
-    @keyframes fadeUpIn {
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-    .footer { text-align: center; padding: 40px 32px 20px 32px; color: #a095b9; font-size: 1.04rem; border-top: 1px solid #e5e5e5;}
-    @media (max-width: 940px) { .hero { flex-direction: column; gap: 22px; padding: 44px 17px 34px 17px; } .hero-right {margin-top: 20px; } }
-  </style>
-</head>
-<body>
-  <nav class="navbar">
-    <div class="navbar-left">
-     <div class="navbar-logo">
-  <img src="lock.png" alt="SecureChat Logo" style="width:40px; height:40px;">
-</div>
-
-      <div class="navbar-title">SecureChat</div>
-    </div>
-    <div class="navbar-right">
-      <button class="navbar-btn login" onclick="window.location.href='login.html'">Log In</button>
-      <button class="navbar-btn register" onclick="window.location.href='login.html#register'">Create Account</button>
-    </div>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-left">
-      <h1 class="hero-title">A place for meaningful conversations.</h1>
-      <div class="hero-desc">
-        SecureChat makes your conversations safe, fast, and easy.<br>
-        Connect, share, and experience privacy-first chat – like WhatsApp, but truly secure.
-      </div>
-    <ul class="hero-features">
-  <li>End-to-end encrypted chats</li>
-  <li>Private 1-to-1 secure rooms</li>
-  <li>Chat history stays on your device only</li>
-  <li>Online + Offline messaging supported</li>
-  <li>No Ads. No tracking. No analytics.</li>
-  <li>Search messages instantly</li>
-</ul>
-
-      <div class="hero-cta">
-        <button class="btn-primary" onclick="window.location.href='login.html#register'">Get Started</button>
-        <button class="btn-secondary" onclick="window.location.href='login.html'">Sign In</button>
-      </div>
-    </div>
-    <div class="hero-right">
-      <img src="chat-app-1.png" alt="Chat Screen 1" class="hero-img" />
-      <img src="chat-app-2.png" alt="Chat Screen 2" class="hero-img" />
-    </div>
-  </section>
-  <footer class="footer">
-    © 2025 SecureChat. All rights reserved.<br>
-    Not affiliated with WhatsApp/Messenger. All trademarks belong to their owners.
-  </footer>
+    });
+  </script>
 </body>
 </html>

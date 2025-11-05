@@ -92,7 +92,7 @@ window.addEventListener('scroll', positionMenu);
     }
   });
 
-  document.addEventListener('click', (e) => {
+ document.addEventListener('click', (e) => {
   if (!menuDropdown) return;
   const id = e.target && e.target.id;
   if (id === 'help-item') {
@@ -108,6 +108,7 @@ window.addEventListener('scroll', positionMenu);
     window.location.href = 'settings.html';
   }
 });
+
 
   // ------------------------
   // Message encryption, decryption, presence, and UI
