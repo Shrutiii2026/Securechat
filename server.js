@@ -22,7 +22,9 @@ app.get('/', (req, res) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // SQLite setup
-const db = new sqlite3.Database(path.join(__dirname, 'securechat.db'));
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'securechat.db');
+const db = new sqlite3.Database(DB_PATH);
+
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -181,4 +183,6 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => console.log(`SecureChat server running on http://localhost:${PORT}`));
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`SecureChat server listening on port ${PORT}`);
+});

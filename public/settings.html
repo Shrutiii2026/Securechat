@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SecureChat - Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="settings-body">
+  <div class="top-bar">
+    <div class="header-logo"><img src="lock.png" alt="SecureChat Logo" /></div>
+    <span class="header-title">SecureChat</span>
+    <button class="header-secure">End-to-end encrypted</button>
+    <div class="topbar-spacer"></div>
+    <a href="chat.html" class="logout-btn" style="text-decoration:none;display:inline-flex;align-items:center;">Back to Chat</a>
+  </div>
+
+  <div class="settings-container">
+    <aside class="settings-sidebar">
+      <button class="settings-tab-btn active" data-tab="appearance">Appearance</button>
+      <button class="settings-tab-btn" data-tab="account">My Account</button>
+      <button class="settings-tab-btn" data-tab="privacy">Privacy</button>
+    </aside>
+
+    <main class="settings-content">
+      <section class="settings-panel" id="panel-appearance">
+        <h2>Appearance</h2>
+        <label class="toggle-row">
+          <input id="dark-toggle" type="checkbox" />
+          <span>Enable dark theme</span>
+        </label>
+        <p class="hint">Dark theme preference is saved on this device.</p>
+      </section>
+
+      <section class="settings-panel hidden" id="panel-account">
+        <h2>My Account</h2>
+        <div class="kv-row">
+          <span class="kv-key">Username</span>
+          <span class="kv-val" id="acct-username"></span>
+        </div>
+        <button id="logout-here" class="flat-wide" style="max-width:240px">Logout</button>
+      </section>
+
+      <section class="settings-panel hidden" id="panel-privacy">
+        <h2>Privacy</h2>
+        <p>This app uses end-to-end encryption for messages between users and stores only what is needed to operate your account (username and current session public key). Nothing is sold or shared with third parties.</p>
+        <p>Your device holds your private key locally; the server never sees it. For best security, keep your browser and OS updated.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Tabs
+    const tabs = document.querySelectorAll('.settings-tab-btn');
+    const panels = {
+      appearance: document.getElementById('panel-appearance'),
+      account: document.getElementById('panel-account'),
+      privacy: document.getElementById('panel-privacy')
+    };
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        Object.values(panels).forEach(p => p.classList.add('hidden'));
+        panels[btn.dataset.tab].classList.remove('hidden');
+      });
+    });
+
+    // Account info
+    const uname = sessionStorage.getItem('username') || '';
+    document.getElementById('acct-username').textContent = uname;
+
+    // Logout here
+    document.getElementById('logout-here').addEventListener('click', () => {
+      try { const s = window.parent?.socket || window.socket; if (s) s.emit && s.emit('logout', uname); } catch {}
+      sessionStorage.clear();
+      location.href = 'index.html';
+    });
+
+    // Dark theme
+    const DARK_KEY = 'securechat_theme';
+    const toggle = document.getElementById('dark-toggle');
+    const saved = localStorage.getItem(DARK_KEY);
+    if (saved === 'dark') document.documentElement.classList.add('theme-dark');
+    toggle.checked = document.documentElement.classList.contains('theme-dark');
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        document.documentElement.classList.add('theme-dark');
+        localStorage.setItem(DARK_KEY, 'dark');
+      } else {
+        document.documentElement.classList.remove('theme-dark');
+        localStorage.setItem(DARK_KEY, 'light');
+      }
+    });
+  </script>
+</body>
+</html>
