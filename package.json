@@ -1,7 +1,7 @@
 {
 "name": "securechat",
 "version": "1.0.0",
-"description": "SecureChat - end-to-end encrypted demo chat",
+"description": "SecureChat - end-to-end encrypted",
 "main": "server.js",
 "scripts": {
 "start": "node server.js",

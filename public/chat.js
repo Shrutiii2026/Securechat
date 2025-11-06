@@ -38,11 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const messageInput = document.getElementById('message-input');
   const messageList = document.getElementById('message-list');
   const logoutBtn = document.getElementById('logout-btn');
-
-  // ------------------------
   // Hamburger menu and dash dropdown
-
- const topBar = document.querySelector('.top-bar');
+const topBar = document.querySelector('.top-bar');
 const menuBtn = document.getElementById('menu-btn'); // reuse right-side button
 
   const menuDropdown = document.createElement('div');
@@ -108,9 +105,6 @@ window.addEventListener('scroll', positionMenu);
     window.location.href = 'settings.html';
   }
 });
-
-
-  // ------------------------
   // Message encryption, decryption, presence, and UI
 
   logoutBtn.onclick = () => {
@@ -130,9 +124,7 @@ window.addEventListener('scroll', positionMenu);
   const receiptSpans = new Map();
   const pendingReadIds = new Set();
 
-
   const unreadCounts = new Map(); // username -> number
-
 
   (async () => {
     identity = await loadOrCreateIdentity();
@@ -162,7 +154,6 @@ window.addEventListener('scroll', positionMenu);
   });
   renderUsers(usersCache);
 }
-
 
  function renderUsers(users) {
   userList.innerHTML = '';
@@ -195,7 +186,6 @@ window.addEventListener('scroll', positionMenu);
   });
 }
 
-
 function updateUnreadBadge(username) {
   const li = [...document.querySelectorAll('.user-item')]
     .find(el => (el.dataset.username || '').toLowerCase() === (username || '').toLowerCase());
@@ -207,7 +197,6 @@ function updateUnreadBadge(username) {
   if (cnt > 0) badge.classList.add('show');
   else badge.classList.remove('show');
 }
-
 
   userSearch.oninput = () => {
     const q = userSearch.value.toLowerCase();
@@ -285,8 +274,6 @@ function updateUnreadBadge(username) {
   unreadCounts.set(username, 0);
   updateUnreadBadge(username);
 }
-
-
   function addBubble(type, text, ts, read, id) {
     const row = document.createElement('div');
     row.className = 'msg-row ' + type;
@@ -344,7 +331,6 @@ function updateUnreadBadge(username) {
       }
     }
   }
-
   messageForm.onsubmit = async (e) => {
     e.preventDefault();
     const msg = messageInput.value.trim();
@@ -398,7 +384,6 @@ function updateUnreadBadge(username) {
     unreadCounts.set(m.sender, prev + 1);
     updateUnreadBadge(m.sender);
   } 
-
 
     if (m.receiver === currentUser && selectedUser === m.sender) {
       pendingReadIds.add(m.id);

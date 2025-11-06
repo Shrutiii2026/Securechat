@@ -51,7 +51,6 @@ body, html {
   align-items: center;
   height: 54px;
 }
-
 .header-secure {
   background: #fff;
   color: #b587c4;
@@ -62,9 +61,6 @@ body, html {
   padding: 6px 22px;
   box-shadow: 0 2px 8px #e3bcfb59;
 }
-
-
-
 /* Menu Button & Dropdown */
 .menu-btn {
   font-size: 26px;
@@ -275,7 +271,6 @@ ul#user-list { list-style: none; margin: 0; padding: 0; }
   gap: 14px;
   margin-top: 0;
 }
-
 /* First Image → Bigger Zoom-in */
 .hero-img:nth-child(1) {
   max-width: 720px;
@@ -286,8 +281,6 @@ ul#user-list { list-style: none; margin: 0; padding: 0; }
   animation: fadeUpInSmall 4.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   animation-delay: 1.5s;
 }
-
-
 /* Animations */
 @keyframes fadeUpInBig {
   to {
@@ -302,21 +295,16 @@ ul#user-list { list-style: none; margin: 0; padding: 0; }
     transform: translateY(0) scale(1.00);
   }
 }
-
-
 .topbar-spacer { flex: 1 1 auto; }
 .top-bar { display: flex; align-items: center; }
 .logout-btn { display: inline-flex; align-items: center; }
 .menu-btn-right { margin-left: 12px; margin-right: 16px; }
  
-
-
 /* Keep right-side buttons inside the bar */
 .top-bar {
   padding-right: 16px;      /* room at the right edge */
   box-sizing: border-box;   /* respect padding with width */
 }
-
 /* Ensure the menu icon doesn't stick to the edge */
 .menu-btn {
   line-height: 1;
@@ -326,22 +314,16 @@ ul#user-list { list-style: none; margin: 0; padding: 0; }
   align-items: center;
   justify-content: center;
 }
-
 /* Right-aligned spacing after Logout */
 .menu-btn-right {
   margin-left: 12px;
   margin-right: 4px;        /* small, not zero */
 }
-
 /* Optional: keep Logout from hugging edge */
 .logout-btn {
   margin-right: 10px;       /* replace larger margins if needed */
 }
-
 .top-bar { padding-right: 16px; box-sizing: border-box; }
-
-
-
 /* Settings layout */
 .settings-body { background: #f9f8fd; }
 .settings-container {
